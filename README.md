@@ -49,8 +49,6 @@
       text-align: left;
     }
     .section { margin-top: 20px; text-align: center; }
-    .ok { color: green; font-weight: bold; }
-    .error { color: red; font-weight: bold; }
     .label { font-weight: bold; margin-left: 10px; }
   </style>
 </head>
@@ -58,14 +56,12 @@
   <h1>Демонстрация функций и отладки</h1>
 
   <div class="section">
-    <!-- Ввод числа для новой функции -->
     <label class="label">Число для факториала:</label>
     <input id="factorialInput" type="number" value="5" min="0">
     <button onclick="createFunction()">Создать и протестировать новую функцию</button>
   </div>
 
   <div class="section">
-    <!-- Ввод массива для сломанной функции -->
     <label class="label">Массив для сломанной функции (через запятую):</label>
     <input id="arrayInput" type="text" value="1,2,3,4">
     <button onclick="createBrokenFunction()">Создать сломанную функцию с ошибкой</button>
@@ -79,10 +75,10 @@
   </div>
 
   <script>
-
+    // 1. Создание новой функции и тесты
     function createFunction() {
       const n = parseInt(document.getElementById('factorialInput').value);
-      // Функция факториала
+
       function factorial(n) {
         if (n < 0) return null;
         let result = 1;
@@ -90,28 +86,25 @@
         return result;
       }
 
-      // Тестирование
       let output = "=== Тестирование факториала ===\n";
-      output += factorial(${n}) = ${factorial(n)} → ${factorial(n) === factorial(n) ? "✔ OK" : "✖ FAIL"}\n;
-      output += factorial(0) = ${factorial(0)} → ${factorial(0) === 1 ? "✔ OK" : "✖ FAIL"}\n;
-      output += factorial(-1) = ${factorial(-1)} → ${factorial(-1) === null ? "✔ OK" : "✖ FAIL"}\n;
+      output += `factorial(${n}) = ${factorial(n)} → ✔ OK\n`;
+      output += `factorial(0) = ${factorial(0)} → ${factorial(0) === 1 ? "✔ OK" : "✖ FAIL"}\n`;
+      output += `factorial(-1) = ${factorial(-1)} → ${factorial(-1) === null ? "✔ OK" : "✖ FAIL"}\n`;
 
       document.getElementById("outputNewFunction").textContent = output;
       document.getElementById("outputBrokenFunction").textContent = "";
       document.getElementById("outputErrorExplanation").textContent = "";
     }
 
-
-    let brokenActive = true; 
+    // 2. Создание сломанной функции
+    let brokenActive = true;
 
     function createBrokenFunction() {
-      const input = document.getElementById('arrayInput').value;
-      const arr = input.split(',').map(Number);
+      const arr = document.getElementById('arrayInput').value.split(',').map(Number);
 
-      // Сломанная функция: сумма элементов массива
       function brokenSum(arr) {
         let sum = 0;
-        for (let i = 0; i <= arr.length; i++) { // Ошибка: <=
+        for (let i = 0; i <= arr.length; i++) { // Ошибка
           sum += arr[i];
         }
         return sum;
@@ -127,24 +120,22 @@
         "Результат: " + result;
 
       document.getElementById("outputErrorExplanation").textContent =
-        "=== Объяснение ошибки ===\n" +
-        "Цикл использует условие i <= arr.length, что делает лишнюю итерацию.\n" +
-        "На последнем шаге arr[i] = undefined → результат становится NaN.\n" +
-        "Исправление: заменить <= на <\n" +
-        "for (let i = 0; i < arr.length; i++)";
+        "Цикл использует i <= arr.length, что вызывает лишнюю итерацию.\n" +
+        "На последнем шаге arr[i] = undefined, результат становится NaN.\n" +
+        "Исправление: заменить <= на <.";
 
       brokenActive = true;
     }
 
-   
+    // 3. Исправление
     function fixBrokenFunction() {
       if (!brokenActive) return;
-      const input = document.getElementById('arrayInput').value;
-      const arr = input.split(',').map(Number);
+
+      const arr = document.getElementById('arrayInput').value.split(',').map(Number);
 
       function fixedSum(arr) {
         let sum = 0;
-        for (let i = 0; i < arr.length; i++) { // исправлено
+        for (let i = 0; i < arr.length; i++) {
           sum += arr[i];
         }
         return sum;
@@ -158,11 +149,11 @@
         "Результат: " + result;
 
       document.getElementById("outputErrorExplanation").textContent =
-        "Ошибка исправлена! Цикл теперь использует i < arr.length.\n" +
-        "На всех шагах значение переменных корректно, NaN не возникает.";
+        "Ошибка исправлена. Цикл корректный.";
 
       brokenActive = false;
     }
   </script>
 </body>
 </html>
+
